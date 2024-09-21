@@ -1,5 +1,5 @@
 # Installation
-## Python Files
+## Python Packages
 ```pip install bleak matplotlib numpy pandas keyboard```
 
 #### Breakdown:
