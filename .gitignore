@@ -1,0 +1,2 @@
+# Dont push csv files / heart rate data
+*.csv
