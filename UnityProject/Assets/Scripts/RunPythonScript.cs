@@ -4,17 +4,30 @@ using UnityEngine;
 using System.IO;
 using System.Diagnostics;
 using System;
+using System.Threading.Tasks;
 
 public class RunPythonScript : MonoBehaviour
 {
-    // Path to the Python executable
-
     void Start()
     {
         string scriptPath = "C:/Users/maxms/Documents/BiometricallyResponsiveGamePlugin/PythonPairing/simulator.py";  // Replace with your Python script path
         string scriptArguments = "";  // Optional: pass arguments if needed
-        RunPython(scriptPath, scriptArguments);
-        UnityEngine.Debug.Log("Python script executed");
+        RunPythonAsync(scriptPath, scriptArguments);
+        UnityEngine.Debug.Log("Python script started");
+    }
+
+    private async void RunPythonAsync(string scriptPath, string arguments = "")
+    {
+        try
+        {
+            // Run the Python script asynchronously
+            await Task.Run(() => RunPython(scriptPath, arguments));
+            UnityEngine.Debug.Log("Python script finished");
+        }
+        catch (Exception e)
+        {
+            UnityEngine.Debug.Log($"An error occurred: {e.Message}");
+        }
     }
 
     private void RunPython(string scriptPath, string arguments = "")
@@ -23,7 +36,7 @@ public class RunPythonScript : MonoBehaviour
         {
             // Create a new process to run Python
             ProcessStartInfo psi = new ProcessStartInfo();
-            psi.FileName = "python";  // If Python is not in PATH, you can provide full path like @"C:\Python39\python.exe"
+            psi.FileName = "python";  // If Python is not in PATH, you can provide the full path like @"C:\Python39\python.exe"
             psi.Arguments = $"{scriptPath} {arguments}";  // Arguments can be passed to the script if needed
             psi.RedirectStandardOutput = true;  // To capture output
             psi.RedirectStandardError = true;   // To capture errors
@@ -40,15 +53,12 @@ public class RunPythonScript : MonoBehaviour
                 process.WaitForExit();
 
                 // Display the output
-                // Console.WriteLine("Output from Python script:");
-                // Console.WriteLine(result);
                 UnityEngine.Debug.Log("Output from Python script:");
                 UnityEngine.Debug.Log(result);
+
                 // Display any errors
                 if (!string.IsNullOrEmpty(errors))
                 {
-                    // Console.WriteLine("Errors:");
-                    // Console.WriteLine(errors);
                     UnityEngine.Debug.Log("Errors:");
                     UnityEngine.Debug.Log(errors);
                 }
@@ -56,7 +66,6 @@ public class RunPythonScript : MonoBehaviour
         }
         catch (Exception e)
         {
-            // Console.WriteLine($"An error occurred: {e.Message}");
             UnityEngine.Debug.Log($"An error occurred: {e.Message}");
         }
     }
