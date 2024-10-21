@@ -11,8 +11,9 @@ if os.path.exists(csv_file_path):
     os.remove(csv_file_path)
 
 # Function to simulate heartbeat data
-def simulate_heartbeat():
-    while True:
+def simulate_heartbeat(duration):
+    start_time = time.time()  # Record the start time
+    while time.time() - start_time < duration:  # Run the loop for the specified duration
         # Simulate a heart rate value
         heart_rate = random.randint(60, 180)
         # Create a DataFrame with the new heart rate
@@ -25,4 +26,4 @@ def simulate_heartbeat():
         time.sleep(1)  # Sleep for 1 second before logging again
 
 if __name__ == "__main__":
-    simulate_heartbeat()
+    simulate_heartbeat(15)  # Run the heartbeat simulation for 15 seconds
