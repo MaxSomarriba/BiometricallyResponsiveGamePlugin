@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 public class RunPythonScript : MonoBehaviour
 {
-    void Start()
+    public void StartScript()
     {
         string scriptPath = "C:/Users/maxms/Documents/BiometricallyResponsiveGamePlugin/PythonPairing/simulator.py";  // Replace with your Python script path
         string scriptArguments = "";  // Optional: pass arguments if needed
