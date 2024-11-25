@@ -56,6 +56,12 @@ public class RunPythonScript : MonoBehaviour
                 UnityEngine.Debug.Log("Output from Python script:");
                 UnityEngine.Debug.Log(result);
 
+                // Check if heart rate exceeds threshold
+                string checkString = "Heart rate is too high";
+                if (result.Contains(checkString)){
+                    UnityEngine.Debug.Log("BRUHHH heart rate was too high");
+                }
+
                 // Display any errors
                 if (!string.IsNullOrEmpty(errors))
                 {

@@ -5,6 +5,15 @@ using UnityEngine;
 public class CircleMovement : MonoBehaviour
 {
     bool moveRight = true;
+    SpriteRenderer spriteRenderer;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        // Get the SpriteRenderer component attached to the GameObject
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -27,6 +36,17 @@ public class CircleMovement : MonoBehaviour
         else
         {
             transform.position += new Vector3(-0.1f, 0, 0);
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        // Change color when spacebar is pressed
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            // Change to a random color
+            spriteRenderer.color = new Color(Random.value, Random.value, Random.value);
         }
     }
 }

@@ -28,7 +28,7 @@ def parse_heart_rate(data):
 def notification_handler(sender, data):
     heart_rate = parse_heart_rate(data)
     print(f"Heart rate: {heart_rate} bpm")
-    if(heart_rate > 75):
+    if(heart_rate > 80):
         print("Heart rate is too high")
         raise SystemExit("Heart rate exceeded threshold. Stopping program.")
 
