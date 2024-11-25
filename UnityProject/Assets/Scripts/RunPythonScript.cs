@@ -10,7 +10,7 @@ public class RunPythonScript : MonoBehaviour
 {
     public void StartScript()
     {
-        string scriptPath = "C:/Users/maxms/Documents/BiometricallyResponsiveGamePlugin/PythonPairing/simulator.py";  // Replace with your Python script path
+        string scriptPath = "C:/Users/maxms/Documents/BiometricallyResponsiveGamePlugin/PythonPairing/main.py";  // Replace with your Python script path
         string scriptArguments = "";  // Optional: pass arguments if needed
         RunPythonAsync(scriptPath, scriptArguments);
         UnityEngine.Debug.Log("Python script started");
