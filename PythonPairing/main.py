@@ -7,6 +7,7 @@ device_address = "E6:7F:A6:74:4F:F0"
 
 # Heart Rate Measurement UUID
 HRM_UUID = "00002a37-0000-1000-8000-00805f9b34fb"
+x= 0
 
 # Function to parse heart rate data from characteristic value
 def parse_heart_rate(data):
@@ -27,17 +28,23 @@ def parse_heart_rate(data):
 def notification_handler(sender, data):
     heart_rate = parse_heart_rate(data)
     print(f"Heart rate: {heart_rate} bpm")
+    if(heart_rate > 75):
+        print("Heart rate is too high")
+        raise SystemExit("Heart rate exceeded threshold. Stopping program.")
+
+    
+
 
 async def run():
     # Connect to the heart rate monitor
     async with BleakClient(device_address) as client:
         print(f"Connected: {client.is_connected}")
-
+        x=client
         # Start receiving notifications from the heart rate measurement characteristic
         await client.start_notify(HRM_UUID, notification_handler)
         
         # Keep the connection alive and listen for notifications
-        await asyncio.sleep(10)  # Adjust the time as needed
+        await asyncio.sleep(30)  # Adjust the time as needed
         
         # Stop notifications after done
         await client.stop_notify(HRM_UUID)
