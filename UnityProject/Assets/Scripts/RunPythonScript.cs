@@ -33,7 +33,9 @@ public class RunPythonScript : MonoBehaviour
             UnityEngine.Debug.Log("Python script finished");
 
             // Rerun
-            StartScript();
+            if(Application.isPlaying){
+                StartScript();
+            }
         }
         catch (Exception e)
         {
