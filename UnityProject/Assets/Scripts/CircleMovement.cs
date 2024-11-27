@@ -10,8 +10,14 @@ public class CircleMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        RunPythonScript.Instance.OnHeartRateTooHigh += RunPythonScript_OnHeartRateTooHigh;
         // Get the SpriteRenderer component attached to the GameObject
         spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    private void RunPythonScript_OnHeartRateTooHigh(object sender, System.EventArgs e)
+    {
+        Debug.Log("Heart rate too high signal received!");
     }
 
     // Update is called once per frame
@@ -48,5 +54,10 @@ public class CircleMovement : MonoBehaviour
             // Change to a random color
             spriteRenderer.color = new Color(Random.value, Random.value, Random.value);
         }
+    }
+
+    private void OnDestroy()
+    {
+        RunPythonScript.Instance.OnHeartRateTooHigh -= RunPythonScript_OnHeartRateTooHigh;
     }
 }

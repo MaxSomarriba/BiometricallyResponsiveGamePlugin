@@ -8,10 +8,18 @@ using System.Threading.Tasks;
 
 public class RunPythonScript : MonoBehaviour
 {
+    public static RunPythonScript Instance { get; private set; }
+    public event EventHandler OnHeartRateTooHigh;
+    string scriptPath = "C:/Users/maxms/Documents/BiometricallyResponsiveGamePlugin/PythonPairing/main.py";  // Replace with your Python script path
+    string scriptArguments = "";  // Optional: pass arguments if needed
+
+    private void Awake()  {
+        Instance = this;
+
+        DontDestroyOnLoad(gameObject);
+    }
     public void StartScript()
     {
-        string scriptPath = "C:/Users/maxms/Documents/BiometricallyResponsiveGamePlugin/PythonPairing/main.py";  // Replace with your Python script path
-        string scriptArguments = "";  // Optional: pass arguments if needed
         RunPythonAsync(scriptPath, scriptArguments);
         UnityEngine.Debug.Log("Python script started");
     }
@@ -23,6 +31,9 @@ public class RunPythonScript : MonoBehaviour
             // Run the Python script asynchronously
             await Task.Run(() => RunPython(scriptPath, arguments));
             UnityEngine.Debug.Log("Python script finished");
+
+            // Rerun
+            StartScript();
         }
         catch (Exception e)
         {
@@ -60,6 +71,7 @@ public class RunPythonScript : MonoBehaviour
                 string checkString = "Heart rate is too high";
                 if (result.Contains(checkString)){
                     UnityEngine.Debug.Log("BRUHHH heart rate was too high");
+                    OnHeartRateTooHigh?.Invoke(this, EventArgs.Empty);
                 }
 
                 // Display any errors
