@@ -10,8 +10,13 @@ public class RunPythonScript : MonoBehaviour
 {
     public static RunPythonScript Instance { get; private set; }
     public event EventHandler OnHeartRateTooHigh;
+    public event EventHandler OnHeartRateSpike;
     string scriptPath = "C:/Users/maxms/Documents/BiometricallyResponsiveGamePlugin/PythonPairing/main.py";  // Replace with your Python script path
-    string scriptArguments = "";  // Optional: pass arguments if needed
+    // string scriptArguments = "";  // Optional: pass arguments if needed
+    [SerializeField] private string deviceAddress = "E6:7F:A6:74:4F:F0";
+    [SerializeField] private int heartbeatThreshold = 83;
+    [SerializeField] private bool lookForSpikes = false;
+    [SerializeField] private int spikeThreshold = 10;
 
     private void Awake()  {
         Instance = this;
@@ -20,6 +25,7 @@ public class RunPythonScript : MonoBehaviour
     }
     public void StartScript()
     {
+        string scriptArguments = $"{deviceAddress} {heartbeatThreshold} {lookForSpikes} {spikeThreshold}";
         RunPythonAsync(scriptPath, scriptArguments);
         UnityEngine.Debug.Log("Python script started");
     }
@@ -70,8 +76,12 @@ public class RunPythonScript : MonoBehaviour
                 UnityEngine.Debug.Log(result);
 
                 // Check if heart rate exceeds threshold
-                string checkString = "Heart rate is too high";
-                if (result.Contains(checkString)){
+                string checkStringSpike = "Heart rate spike detected";
+                string checkStringRate = "Heart rate is too high";
+                if (result.Contains(checkStringSpike)){
+                    UnityEngine.Debug.Log("WOOOAH heart rate spiked");
+                    OnHeartRateSpike?.Invoke(this, EventArgs.Empty);
+                }else if (result.Contains(checkStringRate)){
                     UnityEngine.Debug.Log("BRUHHH heart rate was too high");
                     OnHeartRateTooHigh?.Invoke(this, EventArgs.Empty);
                 }
