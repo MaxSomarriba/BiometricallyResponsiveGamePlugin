@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AlertTextScript : MonoBehaviour
 {
+    string textSet = "Alert:";
     [SerializeField] private TextMeshProUGUI alertText;
     // Start is called before the first frame update
     void Start()
@@ -14,14 +16,19 @@ public class AlertTextScript : MonoBehaviour
         RunPythonScript.Instance.OnHeartRateSpike += RunPythonScript_OnHeartRateSpike;
     }
 
+    void Update(){
+        alertText.text = textSet;
+    }
+
     private void RunPythonScript_OnHeartRateSpike(object sender, EventArgs e){
-        alertText.text = "Alert: Heart rate spike detected!";
-        StartCoroutine(WaitAndClearAlertText());
+        textSet = "Alert: Heart rate spike detected!";
+        // StartCoroutine(WaitAndClearAlertText());
     }
 
     private void RunPythonScript_OnHeartRateTooHigh(object sender, EventArgs e){
-        alertText.text = "Alert: Heart rate is too high!";
-        StartCoroutine(WaitAndClearAlertText());
+        Debug.Log("Heart rate spike detected from alert text script!");
+        textSet = "Alert: Heart rate is too high!";
+        // StartCoroutine(WaitAndClearAlertText());
     }
 
     IEnumerator WaitAndClearAlertText(){

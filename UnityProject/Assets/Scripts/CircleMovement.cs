@@ -17,7 +17,6 @@ public class CircleMovement : MonoBehaviour
 
     private void RunPythonScript_OnHeartRateTooHigh(object sender, System.EventArgs e)
     {
-        Debug.Log("Heart rate too high signal received!");
     }
 
     // Update is called once per frame

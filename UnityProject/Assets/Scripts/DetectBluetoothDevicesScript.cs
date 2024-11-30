@@ -5,27 +5,27 @@ using System.IO;
 using System.Diagnostics;
 using System;
 using System.Threading.Tasks;
+using UnityEditor;
 
-public class RunPythonScript : MonoBehaviour
+public class DetectBluetoothDevicesScript : MonoBehaviour
 {
-    public static RunPythonScript Instance { get; private set; }
-    public event EventHandler OnHeartRateTooHigh;
-    public event EventHandler OnHeartRateSpike;
-    string scriptPath = "C:/Users/maxms/Documents/BiometricallyResponsiveGamePlugin/PythonPairing/main.py";  // Replace with your Python script path
-    // string scriptArguments = "";  // Optional: pass arguments if needed
-    [SerializeField] private string deviceAddress = "E6:7F:A6:74:4F:F0";
-    [SerializeField] private int heartbeatThreshold = 83;
-    [SerializeField] private bool lookForSpikes = false;
-    [SerializeField] private int spikeThreshold = 10;
-
-    private void Awake()  {
-        Instance = this;
-
-        DontDestroyOnLoad(gameObject);
+    
+    public static DetectBluetoothDevicesScript it;
+    public DetectBluetoothDevicesScript(){
+        it = this;
     }
+
+    [MenuItem("Tools/Detect Bluetooth Devices")]
+    private static void x(){
+        it = new DetectBluetoothDevicesScript();
+        it.StartScript();
+    }
+
+    
     public void StartScript()
     {
-        string scriptArguments = $"{deviceAddress} {heartbeatThreshold} {lookForSpikes} {spikeThreshold}";
+        string scriptArguments = "";
+        string scriptPath = "C:/Users/maxms/Documents/BiometricallyResponsiveGamePlugin/PythonPairing/discoverBluetoothDeviceAddr.py";  
         RunPythonAsync(scriptPath, scriptArguments);
         UnityEngine.Debug.Log("script started");
     }
@@ -37,11 +37,6 @@ public class RunPythonScript : MonoBehaviour
             // Run the Python script asynchronously
             await Task.Run(() => RunPython(scriptPath, arguments));
             UnityEngine.Debug.Log("script finished");
-
-            // Rerun
-            if(Application.isPlaying){
-                StartScript();
-            }
         }
         catch (Exception e)
         {
@@ -72,24 +67,7 @@ public class RunPythonScript : MonoBehaviour
                 process.WaitForExit();
 
                 // Display the output
-                UnityEngine.Debug.Log("Output from Python script:");
                 UnityEngine.Debug.Log(result);
-
-                // Check if heart rate exceeds threshold
-                string checkStringSpike = "Heart rate spike detected";
-                string checkStringRate = "Heart rate is too high";
-                if (result.Contains(checkStringSpike)){
-                    OnHeartRateSpike?.Invoke(this, EventArgs.Empty);
-                }else if (result.Contains(checkStringRate)){
-                    OnHeartRateTooHigh?.Invoke(this, EventArgs.Empty);
-                }
-
-                // Display any errors
-                if (!string.IsNullOrEmpty(errors))
-                {
-                    UnityEngine.Debug.Log("Errors:");
-                    UnityEngine.Debug.Log(errors);
-                }
             }
         }
         catch (Exception e)
