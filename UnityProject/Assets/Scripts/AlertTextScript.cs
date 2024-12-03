@@ -26,7 +26,6 @@ public class AlertTextScript : MonoBehaviour
     }
 
     private void RunPythonScript_OnHeartRateTooHigh(object sender, EventArgs e){
-        Debug.Log("Heart rate spike detected from alert text script!");
         textSet = "Alert: Heart rate is too high!";
         // StartCoroutine(WaitAndClearAlertText());
     }
